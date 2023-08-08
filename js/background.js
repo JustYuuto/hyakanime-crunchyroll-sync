@@ -28,7 +28,6 @@ const setProgressStatus = async (id, progress, status) => {
 
 const getHyakanimeToken = async () => {
   let [tab] = await chrome.tabs.query({ url: ['*://www.hyakanime.fr/*'] });
-  console.log(tab);
   if (tab) {
     return (await chrome.scripting.executeScript({
       target: {
@@ -57,7 +56,6 @@ const getAnimeId = async (name) => {
 
 chrome.runtime.onMessage.addListener(async (message) => {
   let [tab] = await chrome.tabs.query({ active: true, url: ['*://www.crunchyroll.com/*'] });
-  console.log(tab);
   if (!tab) return;
   const hyakanimeId = await getAnimeId(message.animeName);
   if (!hyakanimeId) {

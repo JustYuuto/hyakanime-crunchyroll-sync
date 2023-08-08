@@ -36,7 +36,6 @@ function onUrlChange(callback) {
 const crunchyrollWatchRegex = /\/([a-z]{2}\/)?watch\/([A-Z0-9]+)\/([a-z-]+)/g;
 
 function init() {
-  console.log('watching episode');
   waitForElement('h1.heading--nKNOf.heading--is-xs--UyvXH.heading--is-family-type-one--GqBzU.title').then(async () => {
     const animeName = document.querySelector('h4.text--gq6o-.text--is-fixed-size--5i4oU.text--is-semibold--AHOYN.text--is-l--iccTo').textContent;
     const episodeName = document.querySelector('h1.heading--nKNOf.heading--is-xs--UyvXH.heading--is-family-type-one--GqBzU.title').textContent;
