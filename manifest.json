@@ -7,7 +7,7 @@
   "content_scripts": [
     {
       "matches": ["*://www.crunchyroll.com/*"],
-      "js": ["js/content-script.js", "js/watchlist-sync.js"]
+      "js": ["js/content-script.js"]
     }
   ],
   "host_permissions": [
