@@ -55,12 +55,23 @@ const getAnimeId = async (name) => {
 }
 
 chrome.runtime.onMessage.addListener(async (message) => {
-  let [tab] = await chrome.tabs.query({ active: true, url: ['*://www.crunchyroll.com/*'] });
-  if (!tab) return;
-  const hyakanimeId = await getAnimeId(message.animeName);
-  if (!hyakanimeId) {
-    throw new Error(`Failed to find Hyakanime anime id for ${name}: anime not found, maybe not available in their library?`);
-  }
+  if (message.type === 'update_progress') {
+    let [tab] = await chrome.tabs.query({ active: true, url: ['*://www.crunchyroll.com/*'] });
+    if (!tab) return;
+    const hyakanimeId = await getAnimeId(message.animeName);
+    if (!hyakanimeId) {
+      throw new Error(`Failed to find Hyakanime anime id for ${name}: anime not found, maybe not available in their library?`);
+    }
 
-  setProgressStatus(hyakanimeId, message.currentEpisodeNumber, 1);
+    setProgressStatus(hyakanimeId, message.currentEpisodeNumber, 1);
+  } else if (message.type === 'start_watchlist_sync') {
+    const tab = await chrome.tabs.create({ url: 'https://www.hyakanime.fr/', pinned: true, active: false });
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        alert('Veuillez à ne PAS fermer cet onglet pour que la synchronisation puisse s\'effectuer totalement.');
+        window.onbeforeunload = (e) => e.returnValue = 'En fermant cet onglet, la synchronisation s\'ARRÊTERA.';
+      }
+    });
+  }
 });
