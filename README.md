@@ -1,8 +1,12 @@
-# Hyakanime Crunchyroll Sync
+<div align="center"><img src="./icons/icon128.png" alt="Logo" /></div>
+<h1 align="center">Hyakanime Crunchyroll Sync</h1>
 
-Une extension Chrome pour automatiquement synchroniser les épisodes que vous regardez sur Crunchyroll directement sur [Hyakanime](https://www.hyakanime.fr/).
+<p align="center">
+    Une extension pour navigateurs pour automatiquement synchroniser les épisodes que vous regardez sur Crunchyroll, 
+    directement sur <a href="https://www.hyakanime.fr/">Hyakanime</a>.
+</p>
 
-## Contributors
+## Contributeurs
 ![Contributors](https://contrib.rocks/image?repo=JustYuuto/hyakanime-crunchyroll-sync)
 
 ## License
