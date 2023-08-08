@@ -9,5 +9,11 @@
 ## Contributeurs
 ![Contributors](https://contrib.rocks/image?repo=JustYuuto/hyakanime-crunchyroll-sync)
 
+## Crédits
+
+* Idée par [@JustYuuto](https://github.com/JustYuuto)
+* Développement : [cliquer ici](https://github.com/JustYuuto/hyakanime-crunchyroll-sync/graphs/contributors)
+* Logo par [@oriionn](https://github.com/oriionn)
+
 ## License
 Le code source de cette extension est disponible sous la license MIT, [lisible ici](LICENSE).
