@@ -2,7 +2,7 @@
   "name": "Hyakanime Crunchyroll Sync",
   "description": "Synchronisation automatique des épisodes que vous regardez sur Crunchyroll, directement sur Hyakanime.",
   "manifest_version": 3,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "permissions": ["tabs", "activeTab", "scripting"],
   "content_scripts": [
     {
