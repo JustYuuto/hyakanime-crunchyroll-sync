@@ -65,13 +65,44 @@ chrome.runtime.onMessage.addListener(async (message) => {
 
     setProgressStatus(hyakanimeId, message.currentEpisodeNumber, 1);
   } else if (message.type === 'start_watchlist_sync') {
-    const tab = await chrome.tabs.create({ url: 'https://www.hyakanime.fr/', pinned: true, active: false });
-    await chrome.scripting.executeScript({
+    let tabOpened = false, hyakanimeTab;
+    if ((await chrome.tabs.query({ url: ['*://www.hyakanime.fr/*'] })).length < 1) {
+      tabOpened = true;
+      hyakanimeTab = await chrome.tabs.create({ url: 'https://www.hyakanime.fr/', pinned: true, active: false });
+      await chrome.scripting.executeScript({
+        target: { tabId: hyakanimeTab.id },
+        func: () => {
+          alert('Veuillez à ne PAS fermer cet onglet pour que la synchronisation puisse s\'effectuer totalement.');
+        }
+      });
+    }
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    const animes = (await chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      func: () => {
-        alert('Veuillez à ne PAS fermer cet onglet pour que la synchronisation puisse s\'effectuer totalement.');
-        window.onbeforeunload = (e) => e.returnValue = 'En fermant cet onglet, la synchronisation s\'ARRÊTERA.';
+      func: async () => {
+        const epAndSeason = /S([0-9]+) E([0-9]+)/gi;
+        return Array.from(document.querySelectorAll('.watchlist-card-body--ZpYFy')).map(anime => {
+          const status = anime.querySelector('h5.text--gq6o-.text--is-m--pqiL-.watchlist-card-subtitle--IROsU').textContent;
+          return {
+            name: anime.querySelector('a.watchlist-card-title--o1sAO').textContent,
+            season: parseInt([...status.matchAll(epAndSeason)][0][1]),
+            episode: parseInt([...status.matchAll(epAndSeason)][0][2]),
+            continue: !!anime.parentNode.querySelector('.progress-bar--4cDQR.playable-thumbnail__progress-bar--vfMAD')
+          };
+        });
       }
-    });
+    }))[0].result;
+
+    for (const anime of animes) {
+      const id = await getAnimeId(anime.name);
+      try {
+        // 1 = en cours | 2 = à voir
+        await setProgressStatus(id, anime.continue ? anime.episode : 0, anime.continue ? 1 : 2);
+      } catch (e) {
+        console.error(`Failed to sync ${anime.name}: ${e.message}`);
+      }
+    }
+
+    if (tabOpened && hyakanimeTab) await chrome.tabs.remove(hyakanimeTab.id);
   }
 });
