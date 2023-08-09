@@ -45,7 +45,7 @@ const getAnimeId = async (name) => {
 
   try {
     const results = await (await fetch(`${baseUrl}/search/anime/${encodeURIComponent(name)}`)).json();
-    const anime = (results).find(anime => anime.title?.includes(name) || anime.titleEN?.includes(name) || anime.titleJP?.includes(name));
+    const anime = results.find(anime => anime.title === name || anime.titleEN === name || anime.titleJP === name);
     if (anime) {
       return anime.id;
     }
